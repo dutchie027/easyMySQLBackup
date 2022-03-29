@@ -1,0 +1,43 @@
+{
+    "name": "dutchie027/easymysqlbackup",
+    "description": "MySQLBackup",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "MySQL",
+        "PHP",
+        "Composer",
+        "System Administration"
+    ],
+    "authors": [
+        {
+            "name": "Justin Rodino",
+            "email": "justin@rodino.dev"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8",
+        "monolog/monolog": "^2.4",
+        "aws/aws-sdk-php": "^3.216"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "dutchie027\\EasyMySQLBackup\\": "src/"
+        }
+    },
+    "support": {
+        "forum": "https://github.com/dutchie027/easymysqlbackup/discussions",
+        "issues": "https://github.com/dutchie027/easymysqlbackup/issues",
+        "source": "https://github.com/dutchie027/easymysqlbackup/tree/main"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "dutchie027\\Test\\EasyMySQLBackup\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
