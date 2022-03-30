@@ -24,7 +24,7 @@ class Backup
     /**
      * @var string
      */
-    protected $local_file = "";    
+    protected $local_file = '';
 
     /**
      * Constructor
@@ -75,7 +75,7 @@ class Backup
     /**
      * purgeBackup
      */
-    public function purgeBackup() : void
+    public function purgeBackup(): void
     {
         unlink($this->local_file);
     }
