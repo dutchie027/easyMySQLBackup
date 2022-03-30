@@ -9,23 +9,20 @@ use Monolog\Logger;
 
 final class Log
 {
-        /**
- * @var Logger
- */
+    /**
+     * @var Logger
+     */
     protected static $instance;
 
     /**
-     *
-     * @var bool $is_set
+     * @var bool
      */
     protected static $is_set = false;
 
     /**
      * Method to return the Monolog instance
-     *
-     * @return Logger
      */
-    public static function getLogger() : Logger
+    public static function getLogger(): Logger
     {
         if (!self::$is_set) {
             self::configureInstance();
@@ -51,90 +48,98 @@ final class Log
         self::$is_set = true;
     }
 
-        /**
+    /**
      * Add Debug Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::debug("something really interesting happened");
+     *                              Log::debug("something really interesting happened");
      */
     public static function debug($message, array $context = []): void
     {
         self::getLogger()->debug($message, $context);
     }
 
-        /**
+    /**
      * Add Info Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::info("something really interesting happened");
+     *                              Log::info("something really interesting happened");
      */
     public static function info($message, array $context = []): void
     {
         self::getLogger()->info($message, $context);
     }
 
-        /**
+    /**
      * Add Notice Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::notice("something really interesting happened");
+     *                              Log::notice("something really interesting happened");
      */
     public static function notice($message, array $context = []): void
     {
         self::getLogger()->notice($message, $context);
     }
 
-        /**
+    /**
      * Add Warning Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::warning("something really interesting happened");
+     *                              Log::warning("something really interesting happened");
      */
     public static function warning($message, array $context = []): void
     {
         self::getLogger()->warning($message, $context);
     }
 
-        /**
+    /**
      * Add Error Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::error("something really interesting happened");
+     *                              Log::error("something really interesting happened");
      */
-    public static function error($message, array $context = []) :void
+    public static function error($message, array $context = []): void
     {
         self::getLogger()->error($message, $context);
     }
 
-        /**
+    /**
      * Add Critical Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::critical("something really interesting happened");
+     *                              Log::critical("something really interesting happened");
      */
-    public static function critical($message, array $context = []):void
+    public static function critical($message, array $context = []): void
     {
         self::getLogger()->critical($message, $context);
     }
 
-        /**
+    /**
      * Add Alert Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::alert("something really interesting happened");
+     *                              Log::alert("something really interesting happened");
      */
-    public static function alert($message, array $context = []):void
+    public static function alert($message, array $context = []): void
     {
         self::getLogger()->alert($message, $context);
     }
 
-        /**
+    /**
      * Add Emergency Message
-         * @param string $message
+     *
+     * @param string       $message
      * @param array<mixed> $context
-    * Log::emergency("something really interesting happened");
+     *                              Log::emergency("something really interesting happened");
      */
-    public static function emergency($message, array $context = []):void
+    public static function emergency($message, array $context = []): void
     {
         self::getLogger()->emergency($message, $context);
     }

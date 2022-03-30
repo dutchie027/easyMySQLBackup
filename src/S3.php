@@ -17,13 +17,10 @@ class S3
      */
     private $bucketArray;
 
-        /**
+    /**
      * Constructor
      *
      * @param array<string> $settings
-     *
-     * @return void
-     *
      */
     public function __construct(array $settings)
     {
@@ -40,17 +37,14 @@ class S3
         $this->loadS3Buckets();
     }
 
-        /**
+    /**
      * Upload File
      *
      * @param string $file
      * @param string $bucket
      * @param string $name
-     *
-     * @return void
-     *
      */
-    public function uploadFile($file, $bucket, $name = "") : void
+    public function uploadFile($file, $bucket, $name = ''): void
     {
         $key = (strlen($name) < 1) ? basename($file) : $name;
 
@@ -72,13 +66,10 @@ class S3
         }
     }
 
-            /**
+    /**
      * createS3Bucket
      *
      * @param string $bucketName
-     *
-     * @return void
-     *
      */
     private function createS3Bucket($bucketName)
     {
@@ -93,24 +84,19 @@ class S3
         }
     }
 
-            /**
+    /**
      * loadS3Buckets
-     *
-     * @return void
-     *
      */
-    private function loadS3Buckets() : void
+    private function loadS3Buckets(): void
     {
         $this->bucketArray = [];
         Log::debug('Loading Bucket Names');
-/** @var array<string, array<array<string>>> $buckets */
+        /** @var array<string, array<array<string>>> $buckets */
         $buckets = $this->s3->listBuckets();
 
         foreach ($buckets['Buckets'] as $bucket) {
             Log::debug('Adding bucket ' . $bucket['Name'] . ' to the array');
             $this->bucketArray[] = $bucket['Name'];
         }
-    
-
     }
 }

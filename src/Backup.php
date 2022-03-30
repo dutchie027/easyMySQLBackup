@@ -7,32 +7,29 @@ namespace dutchie027\EasyMySQLBackup;
 class Backup
 {
     /**
- * @var string
- */
+     * @var string
+     */
     protected $user;
 
     /**
- * @var string|null
- */
+     * @var string|null
+     */
     protected $pass;
 
     /**
- * @var string
- */
+     * @var string
+     */
     protected $local_store;
 
     /**
- * @var string
- */
+     * @var string
+     */
     protected $local_file;
 
     /**
      * Constructor
      *
      * @param array<string> $settings
-     *
-     * @return void
-     *
      */
     public function __construct(array $settings)
     {
@@ -45,7 +42,7 @@ class Backup
      * createLocalBackup
      *
      * @param string $database
-     * @param bool $compress
+     * @param bool   $compress
      *
      * @throws \Exception
      *
@@ -79,8 +76,6 @@ class Backup
 
     /**
      * purgeBackup
-     *
-     * @return void
      */
     public function purgeBackup()
     {
