@@ -8,15 +8,23 @@ use Aws\S3\S3Client;
 class S3
 {
     /**
-     * @var object
+     * @var S3Client
      */
     private $s3;
 
     /**
-     * @var array
+     * @var array<string>
      */
     private $bucketArray;
 
+        /**
+     * Constructor
+     *
+     * @param array<string> $settings
+     *
+     * @return void
+     *
+     */
     public function __construct(array $settings)
     {
         $this->s3 = new S3Client([
@@ -32,7 +40,17 @@ class S3
         $this->loadS3Buckets();
     }
 
-    public function uploadFile($file, $bucket, $name = null)
+        /**
+     * Upload File
+     *
+     * @param string $file
+     * @param string $bucket
+     * @param string $name
+     *
+     * @return void
+     *
+     */
+    public function uploadFile($file, $bucket, $name = "") : void
     {
         $key = (strlen($name) < 1) ? basename($file) : $name;
 
@@ -54,6 +72,14 @@ class S3
         }
     }
 
+            /**
+     * createS3Bucket
+     *
+     * @param string $bucketName
+     *
+     * @return void
+     *
+     */
     private function createS3Bucket($bucketName)
     {
         Log::info("Gonna make bucket $bucketName");
@@ -67,15 +93,24 @@ class S3
         }
     }
 
-    private function loadS3Buckets()
+            /**
+     * loadS3Buckets
+     *
+     * @return void
+     *
+     */
+    private function loadS3Buckets() : void
     {
         $this->bucketArray = [];
         Log::debug('Loading Bucket Names');
+/** @var array<string, array<array<string>>> $buckets */
         $buckets = $this->s3->listBuckets();
 
         foreach ($buckets['Buckets'] as $bucket) {
             Log::debug('Adding bucket ' . $bucket['Name'] . ' to the array');
             $this->bucketArray[] = $bucket['Name'];
         }
+    
+
     }
 }

@@ -6,18 +6,35 @@ namespace dutchie027\EasyMySQLBackup;
 
 class Backup
 {
+    /**
+ * @var string
+ */
     protected $user;
 
+    /**
+ * @var string|null
+ */
     protected $pass;
 
+    /**
+ * @var string
+ */
     protected $local_store;
 
+    /**
+ * @var string
+ */
     protected $local_file;
 
     /**
-     * SimpleDumper constructor.
+     * Constructor
+     *
+     * @param array<string> $settings
+     *
+     * @return void
+     *
      */
-    public function __construct($settings)
+    public function __construct(array $settings)
     {
         $this->local_store = sys_get_temp_dir();
         $this->user = $settings['user'];
@@ -25,9 +42,10 @@ class Backup
     }
 
     /**
-     * Returns dump from the database
+     * createLocalBackup
      *
      * @param string $database
+     * @param bool $compress
      *
      * @throws \Exception
      *
@@ -60,11 +78,9 @@ class Backup
     }
 
     /**
-     * Returns dump from the database
+     * purgeBackup
      *
-     * @throws \Exception
-     *
-     * @return string
+     * @return void
      */
     public function purgeBackup()
     {

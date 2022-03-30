@@ -9,16 +9,25 @@ use Monolog\Logger;
 
 final class Log
 {
+        /**
+ * @var Logger
+ */
     protected static $instance;
+
+    /**
+     *
+     * @var bool $is_set
+     */
+    protected static $is_set = false;
 
     /**
      * Method to return the Monolog instance
      *
-     * @return \Monolog\Logger
+     * @return Logger
      */
-    public static function getLogger()
+    public static function getLogger() : Logger
     {
-        if (!self::$instance) {
+        if (!self::$is_set) {
             self::configureInstance();
         }
 
@@ -30,7 +39,7 @@ final class Log
      */
     protected static function configureInstance(): void
     {
-        $dir = LOG_DIR . DIRECTORY_SEPARATOR . 'log';
+        $dir = LOG_DIR . DIRECTORY_SEPARATOR . 'log'; // @phpstan-ignore-line
 
         if (!file_exists($dir)) {
             mkdir($dir, 0700, true);
@@ -39,53 +48,94 @@ final class Log
         $logger = new Logger('easyMySQLBackup');
         $logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . 'easyMySQLBackup.log', Logger::DEBUG));
         self::$instance = $logger;
+        self::$is_set = true;
     }
 
-    // Log::info("something really interesting happened");
+        /**
+     * Add Debug Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::debug("something really interesting happened");
+     */
     public static function debug($message, array $context = []): void
     {
         self::getLogger()->debug($message, $context);
     }
 
-    // Log::info("something really interesting happened");
+        /**
+     * Add Info Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::info("something really interesting happened");
+     */
     public static function info($message, array $context = []): void
     {
         self::getLogger()->info($message, $context);
     }
 
-    // Log::info("something really interesting happened");
+        /**
+     * Add Notice Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::notice("something really interesting happened");
+     */
     public static function notice($message, array $context = []): void
     {
         self::getLogger()->notice($message, $context);
     }
 
-    // Log::info("something really interesting happened");
+        /**
+     * Add Warning Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::warning("something really interesting happened");
+     */
     public static function warning($message, array $context = []): void
     {
         self::getLogger()->warning($message, $context);
     }
 
-    // Log::info("something really interesting happened");
-    public static function error($message, array $context = []): void
+        /**
+     * Add Error Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::error("something really interesting happened");
+     */
+    public static function error($message, array $context = []) :void
     {
         self::getLogger()->error($message, $context);
     }
 
-    // Log::info("something really interesting happened");
-    public static function critical($message, array $context = []): void
+        /**
+     * Add Critical Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::critical("something really interesting happened");
+     */
+    public static function critical($message, array $context = []):void
     {
         self::getLogger()->critical($message, $context);
     }
 
-    // Log::info("something really interesting happened");
-    public static function alert($message, array $context = []): void
+        /**
+     * Add Alert Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::alert("something really interesting happened");
+     */
+    public static function alert($message, array $context = []):void
     {
         self::getLogger()->alert($message, $context);
     }
 
-    // Log::info("something really interesting happened");
-    public static function emergency($message, array $context = []): void
+        /**
+     * Add Emergency Message
+         * @param string $message
+     * @param array<mixed> $context
+    * Log::emergency("something really interesting happened");
+     */
+    public static function emergency($message, array $context = []):void
     {
-        self::getLogger()->addEmergency($message, $context);
+        self::getLogger()->emergency($message, $context);
     }
 }
