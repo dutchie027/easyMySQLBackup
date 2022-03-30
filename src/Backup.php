@@ -36,6 +36,7 @@ class Backup
         $this->local_store = sys_get_temp_dir();
         $this->user = $settings['user'];
         $this->pass = isset($settings['pass']) ? '-p' . $settings['pass'] : null;
+        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
     }
 
     /**
@@ -48,12 +49,10 @@ class Backup
      *
      * @return string
      */
-    public function createLocalBackup($database, $compress = true): mixed
+    public function createLocalBackup($database, $compress = true): string
     {
         $output = '';
         $exitCode = 0;
-
-        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
 
         if ($compress) {
             $gzip = ' | gzip -9';

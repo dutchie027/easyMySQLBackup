@@ -33,6 +33,7 @@ final class Log
 
     /**
      * Configure Monolog to use rotating files
+     *  @psalm-suppress UndefinedConstant
      */
     protected static function configureInstance(): void
     {
