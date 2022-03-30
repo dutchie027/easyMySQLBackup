@@ -46,8 +46,6 @@ class Backup
      * @param bool   $compress
      *
      * @throws \Exception
-     *
-     * @return string
      */
     public function createLocalBackup($database, $compress = true): string
     {
