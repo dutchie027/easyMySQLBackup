@@ -22,11 +22,6 @@ class Backup
     protected $local_store;
 
     /**
-     * @var string
-     */
-    protected $local_file;
-
-    /**
      * Constructor
      *
      * @param array<string> $settings
@@ -36,7 +31,6 @@ class Backup
         $this->local_store = sys_get_temp_dir();
         $this->user = $settings['user'];
         $this->pass = isset($settings['pass']) ? '-p' . $settings['pass'] : null;
-        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
     }
 
     /**
@@ -54,9 +48,11 @@ class Backup
         $output = '';
         $exitCode = 0;
 
+        $local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
+
         if ($compress) {
             $gzip = ' | gzip -9';
-            $this->local_file = $this->local_file . '.gz';
+            $local_file = $local_file . '.gz';
         } else {
             $gzip = '';
         }
@@ -70,13 +66,13 @@ class Backup
         }
         Log::info('something really interesting happened');
 
-        return $this->local_file;
+        return $local_file;
     }
 
     /**
      * purgeBackup
      */
-    public function purgeBackup()
+    public function purgeBackup() : void
     {
         unlink($this->local_file);
     }
