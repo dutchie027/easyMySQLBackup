@@ -18,8 +18,7 @@
     "require": {
         "php": "^7.4 || ^8",
         "aws/aws-sdk-php": "^3.216",
-        "monolog/monolog": "^2.4",
-        "vlucas/phpdotenv": "^5.4"
+        "monolog/monolog": "^2.4"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
