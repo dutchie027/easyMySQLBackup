@@ -71,7 +71,7 @@ class S3
      *
      * @param string $bucketName
      */
-    private function createS3Bucket($bucketName) : void
+    private function createS3Bucket($bucketName): void
     {
         Log::info("Gonna make bucket $bucketName");
 

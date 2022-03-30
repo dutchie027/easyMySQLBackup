@@ -70,7 +70,7 @@ class Backup
     /**
      * purgeBackup
      */
-    public function purgeBackup() : void
+    public function purgeBackup(): void
     {
         unlink($this->local_file);
     }
