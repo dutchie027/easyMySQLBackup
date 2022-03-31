@@ -1,8 +1,12 @@
 # Easy MySQL Backup
 
 [![Packagist Downloads](https://img.shields.io/packagist/dm/dutchie027/easymysqlbackup)](https://packagist.org/packages/dutchie027/easymysqlbackup)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dutchie027/easymysqlbackup/Tests/main?logo=github)](https://github.com/dutchie027/easymysqlbackup/actions)
 [![Code Coverage](https://codecov.io/gh/dutchie027/easymysqlbackup/branch/main/graph/badge.svg)](https://codecov.io/gh/dutchie027/easymysqlbackup)
+[![CodeFactor](https://www.codefactor.io/repository/github/dutchie027/easymysqlbackup/badge)](https://www.codefactor.io/repository/github/dutchie027/easymysqlbackup)
+[![Code Coverage](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/code-coverage.yml/badge.svg)](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/code-coverage.yml)
+[![Coding Standards](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/code-standards.yml/badge.svg)](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/code-standards.yml)
+[![Static analysis](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/static-analysis.yml)
+[![Tests](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/tests.yml/badge.svg)](https://github.com/dutchie027/easyMySQLBackup/actions/workflows/tests.yml)
 
 ## About
 
