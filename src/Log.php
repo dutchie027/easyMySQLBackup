@@ -55,7 +55,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::debug("something really interesting happened");
+     * 
+     * @example Log::debug("something really interesting happened");
      */
     public static function debug($message, array $context = []): void
     {
@@ -67,7 +68,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::info("something really interesting happened");
+     * 
+     * @example Log::info("something really interesting happened");
      */
     public static function info($message, array $context = []): void
     {
@@ -79,7 +81,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::notice("something really interesting happened");
+     * 
+     * @example Log::notice("something really interesting happened");
      */
     public static function notice($message, array $context = []): void
     {
@@ -91,7 +94,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::warning("something really interesting happened");
+     * 
+     * @example Log::warning("something really interesting happened");
      */
     public static function warning($message, array $context = []): void
     {
@@ -103,7 +107,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::error("something really interesting happened");
+     * 
+     * @example Log::error("something really interesting happened");
      */
     public static function error($message, array $context = []): void
     {
@@ -115,7 +120,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::critical("something really interesting happened");
+     * 
+     * @example Log::critical("something really interesting happened");
      */
     public static function critical($message, array $context = []): void
     {
@@ -127,7 +133,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::alert("something really interesting happened");
+     * 
+     * @example Log::alert("something really interesting happened");
      */
     public static function alert($message, array $context = []): void
     {
@@ -139,7 +146,8 @@ final class Log
      *
      * @param string       $message
      * @param array<mixed> $context
-     *                              Log::emergency("something really interesting happened");
+     * 
+     * @example Log::emergency("something really interesting happened");
      */
     public static function emergency($message, array $context = []): void
     {
