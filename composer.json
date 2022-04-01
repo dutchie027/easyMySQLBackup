@@ -1,10 +1,13 @@
 {
     "name": "dutchie027/easymysqlbackup",
-    "description": "MySQLBackup",
+    "description": "This library piggybacks on the functionality of mysqldump, creating a backup of a Maria or MySQL database. It allows you to save locally or upload to cloud storage.",
     "license": "MIT",
     "type": "library",
     "keywords": [
         "MySQL",
+        "MariaDB",
+        "SQL",
+        "Backup",
         "PHP",
         "Composer",
         "System Administration"
@@ -16,7 +19,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8",
+        "php": ">=7.4",
         "aws/aws-sdk-php": "^3.216",
         "monolog/monolog": "^2.4"
     },
