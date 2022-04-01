@@ -17,12 +17,6 @@ final class S3Test extends TestCase
 
         $stub = $this->getMockBuilder(S3::class)->disableOriginalConstructor()->getMock();
         self::doesNotPerformAssertions();
-
-        // $stub->method('createS3Bucket')
-        // ->willReturn(true);
-        // $s3->uploadFile($stockFile, "bob-test");
-        // $stub("test");
-        // $this->assertSame(true, $stub->createS3Bucket('bob'));
     }
 
     public function testUploadFile(): void

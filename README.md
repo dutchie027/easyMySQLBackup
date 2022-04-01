@@ -10,6 +10,7 @@
 
 ## About
 
+This package allows you to backup a mysql database using `mysqldump` and then store it to a local file store (by default) or upload it to S3.
 
 ## Installation
 
@@ -18,6 +19,62 @@ Install this package as a dependency using [Composer](https://getcomposer.org).
 ``` bash
 composer require dutchie027/easymysqlbackup
 ```
+
+You will also need to ensure you have a copy of `mysqldump` on the box this is hosted on.
+
+## Usage
+
+``` php
+#!/usr/bin/php
+<?php
+
+include_once 'vendor/autoload.php';
+
+# This is the directory where the logs will be stored
+define ('LOG_DIR', '/tmp');
+
+# These are the settings for mysqldump
+# The keys are user (required), password (optional), and dir (optional)
+$settings = [
+    'user' => 'root',
+];
+
+# Establish the connection with the settings above
+$connection = new dutchie027\EasyMySQLBackup\Backup($settings);
+# Backup the database named "test". The location on the file system will be returned
+$backup_name = $connection->createLocalBackup("test");
+
+# Grab S3 Config in to an array of Key Value Pairs
+# NOTE: Store this outside of the directory/project files
+$s3config = parse_ini_file('/opt/configs/s3.ini');
+
+# Create a new S3 connector using the config values pulled from the .ini
+$s3 = new dutchie027\EasyMySQLBackup\S3($s3config);
+
+# Upload the $backup_name file to the bucket "my-sql-backups"
+# NOTE: If the bucket "my-sql-backups" doesn't exist, it will create it
+$s3->uploadFile($backup_name, "my-sql-backups");
+
+# Using the initial connection, remove the local file
+$connection->purgeBackup();
+```
+
+## Sample s3.ini
+
+``` ini
+[s3]
+region = 'us-east-1'
+endpoint = "https://s3.us-east-1.amazonaws.com"
+access_key = "ABCD1234EFGH5678ZZZZ"
+secret_key = "JuStiN8675309NeEDedA30918KeYtoTest567890"
+```
+
+## To-Do
+
+* Add routines to allow for removal of local backups older than "x" days
+* Possibly add additional APIs for cloud storage
+* Clean up the documentation
+* Other things
 
 ## Code of Conduct
 
