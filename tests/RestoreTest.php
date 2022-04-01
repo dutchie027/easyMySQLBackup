@@ -11,8 +11,8 @@ final class RestoreTest extends TestCase
     protected function setUp(): void
     {
         if (!extension_loaded('mysqli')) {
-            $this->markTestSkipped(
-              'The MySQLi extension is not available.'
+            self::markTestSkipped(
+                'The MySQLi extension is not available.'
             );
         }
     }
