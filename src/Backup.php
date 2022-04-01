@@ -36,7 +36,7 @@ class Backup
         $this->local_store = $settings['dir'] ?? sys_get_temp_dir();
 
         if (!file_exists($this->local_store)) {
-            mkdir($dir, 0700, true);
+            mkdir($this->local_store, 0700, true);
         }
         $this->user = $settings['user'];
         $this->pass = isset($settings['pass']) ? '-p' . $settings['pass'] : null;
