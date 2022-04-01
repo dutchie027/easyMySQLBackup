@@ -33,7 +33,8 @@ class Backup
      */
     public function __construct(array $settings)
     {
-        $this->local_store = isset($settings['dir']) ? $settings['dir'] : sys_get_temp_dir();
+        $this->local_store = $settings['dir'] ?? sys_get_temp_dir();
+
         if (!file_exists($this->local_store)) {
             mkdir($dir, 0700, true);
         }
