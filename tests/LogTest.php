@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace dutchie027\Test\EasyMySQLBackup;
 
 use PHPUnit\Framework\TestCase;
+use dutchie027\EasyMySQLBackup\Log;
 
 define('LOG_DIR', '.build');
 
