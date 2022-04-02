@@ -17,20 +17,26 @@ class S3
      */
     private $bucketArray;
 
+            /**
+     * @var object
+     */
+    private $config;
+
     /**
      * Constructor
      *
      * @param array<string> $settings
      */
-    public function __construct(array $settings)
+    public function __construct(Config $config)
     {
+        $this->config = $config;
         $this->s3 = new S3Client([
             'version' => 'latest',
-            'region' => $settings['region'],
-            'endpoint' => $settings['endpoint'],
+            'region' => $this->config->getS3Region(),
+            'endpoint' => $this->config->getS3Endpoint(),
             'credentials' => [
-                'key' => $settings['access_key'],
-                'secret' => $settings['secret_key'],
+                'key' => $this->config->getS3AccessKey(),
+                'secret' => $this->config->getS3SecretKey(),
             ],
         ]);
 
@@ -59,7 +65,7 @@ class S3
                 'Bucket' => $bucket,
                 'Key' => $key,
                 'SourceFile' => $file,
-                'ACL' => 'private',
+                'ACL' => $this->config->getS3ACL(),
             ]);
         } catch (S3Exception $e) {
             Log::error($e->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);

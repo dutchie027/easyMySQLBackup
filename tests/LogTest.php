@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace dutchie027\Test\EasyMySQLBackup;
 
 use dutchie027\EasyMySQLBackup\Log;
+use dutchie027\EasyMySQLBackup\Config;
 use PHPUnit\Framework\TestCase;
-
-define('LOG_DIR', '.build');
 
 final class LogTest extends TestCase
 {
@@ -16,15 +15,10 @@ final class LogTest extends TestCase
      */
     private static $filename;
 
-    /**
-     * @var string
-     */
-    private static $logname;
-
     public static function setUpBeforeClass(): void
     {
-        self::$logname = 'easyMySQLBackup' . date('-Y-m-d') . '.log';
-        self::$filename = LOG_DIR . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . self::$logname;
+        new Config;
+        self::$filename = Config::getLogDir() . DIRECTORY_SEPARATOR . Config::getLogPrefix() . date('-Y-m-d') . '.log';
     }
 
     public static function tearDownAfterClass(): void

@@ -6,6 +6,7 @@ namespace dutchie027\EasyMySQLBackup;
 
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use dutchie027\EasyMySQLBackup\Config;
 
 final class Log
 {
@@ -33,19 +34,18 @@ final class Log
 
     /**
      * Configure Monolog to use rotating files
-     *
-     *  @psalm-suppress UndefinedConstant
      */
     protected static function configureInstance(): void
     {
-        $dir = LOG_DIR . DIRECTORY_SEPARATOR . 'log'; // @phpstan-ignore-line
+        
+        $dir = Config::getLogDir();
 
         if (!file_exists($dir)) {
             mkdir($dir, 0700, true);
         }
 
         $logger = new Logger('easyMySQLBackup');
-        $logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . 'easyMySQLBackup.log', Logger::DEBUG));
+        $logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . Config::getLogPrefix() . '.log', Config::getLogLevel()));
         self::$instance = $logger;
         self::$is_set = true;
     }

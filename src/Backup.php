@@ -26,20 +26,26 @@ class Backup
      */
     protected $local_file = '';
 
+        /**
+     * @var object
+     */
+    private $config;
+
     /**
      * Constructor
      *
-     * @param array<string> $settings
+     * @param Config $config
      */
-    public function __construct(array $settings)
+    public function __construct(Config $config)
     {
-        $this->local_store = $settings['dir'] ?? sys_get_temp_dir();
+        $this->config = $config;
+        $this->local_store = $this->config->getLogDir();
 
         if (!file_exists($this->local_store)) {
             mkdir($this->local_store, 0700, true);
         }
-        $this->user = $settings['user'];
-        $this->pass = isset($settings['pass']) ? '-p' . $settings['pass'] : null;
+        $this->user = $this->config->getDBUser();
+        $this->pass = strlen($this->config->getDBPassword()) > 1 ? '-p' . $this->config->getDBPassword() : null;
     }
 
     /**
@@ -65,6 +71,8 @@ class Backup
         }
 
         $command = "mysqldump -u {$this->user} {$this->pass} {$database} {$gzip} > {$this->local_file}";
+
+        print $command;
 
         exec($command, $output, $exitCode);
 
