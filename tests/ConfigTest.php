@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 final class ConfigTest extends TestCase
 {
     /**
-     * @var object
+     * @var Config
      */
     private $config;
 
