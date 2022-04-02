@@ -24,49 +24,53 @@ You will also need to ensure you have a copy of `mysqldump` on the box this is h
 
 ## Usage
 
+The program will assume a lot of defaults if you don't have a config file, however it is highly suggested you create a config (see sample .ini below)
+
 ``` php
 #!/usr/bin/php
 <?php
 
 include_once 'vendor/autoload.php';
 
-# This is the directory where the logs will be stored
-define ('LOG_DIR', '/tmp');
+use dutchie027\EasyMySQLBackup\Backup;
+use dutchie027\EasyMySQLBackup\Config;
+use dutchie027\EasyMySQLBackup\S3;
 
-# These are the settings for mysqldump
-# The keys are user (required), password (optional), and dir (optional)
-$settings = [
-    'user' => 'root',
-];
+# OPTION A: Create a new default "configuration" set
+$config = new Config();
 
-# Establish the connection with the settings above
-$connection = new dutchie027\EasyMySQLBackup\Backup($settings);
+# OPTION B: Create a configuration set using a .ini file
+$config = new Config('/path/to/my.ini');
+
+# Create a new backup instance with the config from above
+$backup = new Backup($config);
 # Backup the database named "test". The location on the file system will be returned
-$backup_name = $connection->createLocalBackup("test");
-
-# Grab S3 Config in to an array of Key Value Pairs
-# NOTE: Store this outside of the directory/project files
-$s3config = parse_ini_file('/opt/configs/s3.ini');
-
-# Create a new S3 connector using the config values pulled from the .ini
-$s3 = new dutchie027\EasyMySQLBackup\S3($s3config);
+$backup_file = $backup->createLocalBackup("test");
 
 # Upload the $backup_name file to the bucket "my-sql-backups"
 # NOTE: If the bucket "my-sql-backups" doesn't exist, it will create it
-$s3->uploadFile($backup_name, "my-sql-backups");
+(new S3($config))->uploadFile($backup, "my-sql-backups");
 
 # Using the initial connection, remove the local file
-$connection->purgeBackup();
+$backup->purgeBackup();
 ```
 
-## Sample s3.ini
+## Sample my.ini
 
 ``` ini
 [s3]
-region = 'us-east-1'
-endpoint = "https://s3.us-east-1.amazonaws.com"
-access_key = "ABCD1234EFGH5678ZZZZ"
-secret_key = "JuStiN8675309NeEDedA30918KeYtoTest567890"
+S3_REGION     = 'us-east-1'
+S3_ENDPOINT   = "https://s3.us-east-1.amazonaws.com"
+S3_ACCESS_KEY = "ABCD1234EFGH5678ZZZZ"
+S3_SECRET_KEY = "JuStiN8675309NeEDedA30918KeYtoTest567890"
+
+[database]
+DB_USER = 'root'
+DB_PASSWORD = ''
+
+[log]
+LOG_LEVEL = 105
+LOG_PREFIX = easyMySQLBackup
 ```
 
 ## To-Do
