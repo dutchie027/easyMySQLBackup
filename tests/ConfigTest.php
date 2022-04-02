@@ -22,11 +22,12 @@ final class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->tmp_ini = tempnam(sys_get_temp_dir(), 'phpunit') ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php-unit';
-        $handle = fopen($this->tmp_ini, "w");
-        if ( $handle ) {
-            fwrite($handle, "[s3]" . PHP_EOL);
+        $handle = fopen($this->tmp_ini, 'w');
+
+        if ($handle) {
+            fwrite($handle, '[s3]' . PHP_EOL);
             fwrite($handle, "S3_REGION = 'us-east-3'" . PHP_EOL . PHP_EOL);
-            fwrite($handle, "[database]" . PHP_EOL);
+            fwrite($handle, '[database]' . PHP_EOL);
             fwrite($handle, "DB_USER = 'bob'" . PHP_EOL);
             fclose($handle);
         }
