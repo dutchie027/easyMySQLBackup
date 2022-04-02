@@ -23,6 +23,11 @@ class S3
     private $config;
 
     /**
+     * @var string
+     */
+    private $s3_acl;
+
+    /**
      * Constructor
      */
     public function __construct(Config $config)
@@ -37,7 +42,7 @@ class S3
                 'secret' => $this->config->getS3SecretKey(),
             ],
         ]);
-
+        $this->s3_acl = $this->config->getS3ACL();
         $this->loadS3Buckets();
     }
 
@@ -63,7 +68,7 @@ class S3
                 'Bucket' => $bucket,
                 'Key' => $key,
                 'SourceFile' => $file,
-                'ACL' => $this->config->getS3ACL(),
+                'ACL' => $this->s3_acl,
             ]);
         } catch (S3Exception $e) {
             Log::error($e->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);

@@ -7,10 +7,10 @@ namespace dutchie027\EasyMySQLBackup;
 final class Config
 {
     /**
-     *  @const array<int> $allowed_levels
+     *  @const array<int>
      * 'DEBUG'|'INFO'|'NOTICE'|'WARNING'|'ERROR'|'CRITICAL'|'ALERT'|'EMERGENCY'
      */
-    private const ALLOWED_LEVELS = [100, 200, 250, 300, 400, 500, 550, 600];
+    private const ALLOWED_LEVELS = array(100, 200, 250, 300, 400, 500, 550, 600);
 
     /**
      * @var string
@@ -175,7 +175,7 @@ final class Config
         [$root, $key] = explode('/', $var);
         $varlc = strtolower($key);
 
-        return (isset($this->ini_data[$root][$key]) && in_array($this->ini_data[$root][$key], self::ALLOWED_LEVELS, true)) ? (int) $this->ini_data[$root][$key] : $dv;
+        return ( (isset($this->ini_data[$root][$key])) && (in_array($this->ini_data[$root][$key], self::ALLOWED_LEVELS)) ) ? (int) $this->ini_data[$root][$key] : $dv;
     }
 
     /**
