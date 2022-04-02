@@ -14,14 +14,29 @@ final class ConfigTest extends TestCase
      */
     private $config;
 
+    /**
+     * @var string
+     */
+    private $tmp_ini;
+
     protected function setUp(): void
     {
-        $this->config = new Config();
+        $this->tmp_ini = tempnam(sys_get_temp_dir(), 'phpunit') ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php-unit';
+        $handle = fopen($this->tmp_ini, "w");
+        if ( $handle ) {
+            fwrite($handle, "[s3]" . PHP_EOL);
+            fwrite($handle, "S3_REGION = 'us-east-3'" . PHP_EOL . PHP_EOL);
+            fwrite($handle, "[database]" . PHP_EOL);
+            fwrite($handle, "DB_USER = 'bob'" . PHP_EOL);
+            fclose($handle);
+        }
+
+        $this->config = new Config($this->tmp_ini);
     }
 
     public function testgetDBUser(): void
     {
-        self::assertEquals('root', $this->config->getDBUser());
+        self::assertEquals('bob', $this->config->getDBUser());
     }
 
     public function testgetDBPassword(): void
@@ -46,7 +61,7 @@ final class ConfigTest extends TestCase
 
     public function testgetS3Region(): void
     {
-        self::assertEquals('us-east-1', $this->config->getS3Region());
+        self::assertEquals('us-east-3', $this->config->getS3Region());
     }
 
     public function testgetS3Endpoint(): void
