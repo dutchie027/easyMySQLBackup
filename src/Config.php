@@ -175,7 +175,7 @@ final class Config
         [$root, $key] = explode('/', $var);
         $varlc = strtolower($key);
 
-        return ((isset($this->ini_data[$root][$key])) && (in_array($this->ini_data[$root][$key], self::ALLOWED_LEVELS, true))) ? (int) $this->ini_data[$root][$key] : $dv;
+        return ((isset($this->ini_data[$root][$key])) && (in_array((int)$this->ini_data[$root][$key], self::ALLOWED_LEVELS, true))) ? (int) $this->ini_data[$root][$key] : $dv;
     }
 
     /**
