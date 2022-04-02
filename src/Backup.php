@@ -87,6 +87,6 @@ class Backup
      */
     public function purgeBackup(): void
     {
-        unlink($this->local_file);
+        @unlink($this->local_file);
     }
 }
