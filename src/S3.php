@@ -17,15 +17,13 @@ class S3
      */
     private $bucketArray;
 
-            /**
+    /**
      * @var object
      */
     private $config;
 
     /**
      * Constructor
-     *
-     * @param array<string> $settings
      */
     public function __construct(Config $config)
     {

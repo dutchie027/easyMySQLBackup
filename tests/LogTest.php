@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace dutchie027\Test\EasyMySQLBackup;
 
-use dutchie027\EasyMySQLBackup\Log;
 use dutchie027\EasyMySQLBackup\Config;
+use dutchie027\EasyMySQLBackup\Log;
 use PHPUnit\Framework\TestCase;
 
 final class LogTest extends TestCase
@@ -17,7 +17,7 @@ final class LogTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        new Config;
+        new Config();
         self::$filename = Config::getLogDir() . DIRECTORY_SEPARATOR . Config::getLogPrefix() . date('-Y-m-d') . '.log';
     }
 

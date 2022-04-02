@@ -26,15 +26,13 @@ class Backup
      */
     protected $local_file = '';
 
-        /**
+    /**
      * @var object
      */
     private $config;
 
     /**
      * Constructor
-     *
-     * @param Config $config
      */
     public function __construct(Config $config)
     {

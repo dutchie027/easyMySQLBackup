@@ -6,7 +6,6 @@ namespace dutchie027\EasyMySQLBackup;
 
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
-use dutchie027\EasyMySQLBackup\Config;
 
 final class Log
 {
@@ -37,7 +36,6 @@ final class Log
      */
     protected static function configureInstance(): void
     {
-        
         $dir = Config::getLogDir();
 
         if (!file_exists($dir)) {
