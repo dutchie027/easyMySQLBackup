@@ -27,16 +27,16 @@ class Backup
     protected $local_file = '';
 
     /**
-     * @var object
+     * @var Config
      */
     private $config;
 
     /**
      * Constructor
      */
-    public function __construct(Config $config)
+    public function __construct(string $configLoc = null)
     {
-        $this->config = $config;
+        $this->config = is_null($configLoc) ? new Config : new Config($configLoc);
         $this->local_store = $this->config->getLogDir();
 
         if (!file_exists($this->local_store)) {
@@ -70,8 +70,6 @@ class Backup
 
         $command = "mysqldump -u {$this->user} {$this->pass} {$database} {$gzip} > {$this->local_file}";
 
-        print $command;
-
         exec($command, $output, $exitCode);
 
         if ($exitCode > 0) {
@@ -88,5 +86,17 @@ class Backup
     public function purgeBackup(): void
     {
         @unlink($this->local_file);
+    }
+
+    /**
+     * s3
+     * Pointer to the \S3 class
+     *
+     * @return S3
+     *
+     */
+    public function s3(): S3
+    {
+        return new S3($this->config);
     }
 }

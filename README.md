@@ -33,23 +33,19 @@ The program will assume a lot of defaults if you don't have a config file, howev
 include_once 'vendor/autoload.php';
 
 use dutchie027\EasyMySQLBackup\Backup;
-use dutchie027\EasyMySQLBackup\Config;
-use dutchie027\EasyMySQLBackup\S3;
 
-# OPTION A: Create a new default "configuration" set
-$config = new Config();
+# OPTION A: Create a new backup with "default" configuration set
+$backup = new Backup($config);
 
 # OPTION B: Create a configuration set using a .ini file
-$config = new Config('/path/to/my.ini');
+$backup = new Backup('/path/to/my.ini');
 
-# Create a new backup instance with the config from above
-$backup = new Backup($config);
 # Backup the database named "test". The location on the file system will be returned
 $backup_file = $backup->createLocalBackup("test");
 
 # Upload the $backup_name file to the bucket "my-sql-backups"
 # NOTE: If the bucket "my-sql-backups" doesn't exist, it will create it
-(new S3($config))->uploadFile($backup, "my-sql-backups");
+$backup->s3->uploadFile($backup_file, "my-sql-backups");
 
 # Using the initial connection, remove the local file
 $backup->purgeBackup();

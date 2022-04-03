@@ -17,7 +17,7 @@ final class BackupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->backup = new Backup(new Config());
+        $this->backup = new Backup();
     }
 
     public function testPurgeBackup(): void
