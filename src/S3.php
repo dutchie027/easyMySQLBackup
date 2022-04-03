@@ -76,6 +76,58 @@ class S3
     }
 
     /**
+     * Download File
+     *
+     * @param string $file
+     * @param string $directory
+     * @param string $newName
+     *
+     * @return string location and file name
+     */
+    public function downloadFile($file, $directory = '.', $newName = null): string
+    {
+        $fileParts = explode('/', $file);
+        $bucket = $fileParts[0];
+        $s3Key = '';
+
+        for ($x = 1;$x < count($fileParts) ; ++$x) {
+            $s3Key = $fileParts[$x] . DIRECTORY_SEPARATOR;
+        }
+
+        $s3Key = substr($s3Key, 0, -1);
+        $s3File = $newName ?? $fileParts[count($fileParts) - 1];
+
+        try {
+            if (!in_array($bucket, $this->bucketArray, true)) {
+                throw new \Exception('Bucket ' . $bucket . ' is incorrect or does not exist');
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            print $e->getMessage() . PHP_EOL;
+
+            exit;
+        }
+
+        $saveAs = $directory . DIRECTORY_SEPARATOR . $s3File;
+
+        try {
+            $result = $this->s3->getObject([
+                'Bucket' => $bucket,
+                'Key' => $s3Key,
+                'SaveAs' => $saveAs,
+            ]);
+        } catch (S3Exception $e) {
+            $error = $file . ' returned ' . $e->getStatusCode() . ' ' . $e->getAWSErrorCode();
+            Log::error($error);
+            print $error . PHP_EOL;
+
+            exit;
+        }
+
+        return $saveAs;
+    }
+
+    /**
      * Create an S3 Bucket
      *
      * @param string $bucketName
@@ -89,7 +141,11 @@ class S3
                 'Bucket' => $bucketName,
             ]);
         } catch (S3Exception $e) {
-            Log::error($e->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            $error = $bucketName . ' returned ' . $e->getStatusCode() . ' ' . $e->getAWSErrorCode();
+            Log::error($error);
+            print $error . PHP_EOL;
+
+            exit;
         }
     }
 
