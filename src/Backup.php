@@ -132,6 +132,7 @@ class Backup
             foreach ($required as $program) {
                 Log::debug('Checking existence of ' . $program);
                 exec("command -v $program", $output, $exitCode);
+
                 if ($exitCode > 0) {
                     throw new \Exception('You don\'t seem to have ' . $program . ' on the system');
                 }
