@@ -20,7 +20,7 @@ Install this package as a dependency using [Composer](https://getcomposer.org).
 composer require dutchie027/easymysqlbackup
 ```
 
-You will also need to ensure you have a copy of `mysqldump` on the box this is hosted on.
+You will also need to ensure you have a copy of `mysqldump` on the box this is hosted on. Also, if you want to use compression for backup and restore, you'll need `gzip` and `gunzip`.
 
 ## Usage
 
@@ -110,7 +110,7 @@ $buf = $backup->s3()->downloadFile('bob-test/coredb.20220330162457.sql.gz', '/tm
 $backup->restore()->restoreLocalBackup($buf, 'core-restore', 1);
 ```
 
-## Sample my.ini
+## Sample my.ini (showing all values)
 
 ``` ini
 [s3]
