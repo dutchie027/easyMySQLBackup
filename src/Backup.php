@@ -36,7 +36,7 @@ class Backup
      */
     public function __construct(string $configLoc = null)
     {
-        $this->config = is_null($configLoc) ? new Config : new Config($configLoc);
+        $this->config = null === $configLoc ? new Config() : new Config($configLoc);
         $this->local_store = $this->config->getLogDir();
 
         if (!file_exists($this->local_store)) {
@@ -91,9 +91,6 @@ class Backup
     /**
      * s3
      * Pointer to the \S3 class
-     *
-     * @return S3
-     *
      */
     public function s3(): S3
     {
