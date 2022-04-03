@@ -80,7 +80,7 @@ class Backup
         $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
 
         if ($compress) {
-            $compressLevel = (is_numeric($level) && $level > 0 && $level < 10) ? $level : 9;
+            $compressLevel = ($level > 0 && $level < 10) ? $level : 9;
             $gzip = " | gzip -{$compressLevel}";
             $this->local_file = $this->local_file . '.gz';
         } else {
@@ -130,9 +130,9 @@ class Backup
 
         if (PHP_OS != 'WINNT') {
             foreach ($required as $program) {
-                Log::debug('Chccking existence of ' . $program);
-
-                if (!`command -v $program`) {
+                Log::debug('Checking existence of ' . $program);
+                exec("command -v $program", $output, $exitCode);
+                if ($exitCode > 0) {
                     throw new \Exception('You don\'t seem to have ' . $program . ' on the system');
                 }
             }
