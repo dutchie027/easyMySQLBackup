@@ -28,7 +28,9 @@ class S3
     private $s3_acl;
 
     /**
-     * Constructor
+     * Default Constructor
+     * 
+     * @param Config $config
      */
     public function __construct(Config $config)
     {
@@ -76,7 +78,7 @@ class S3
     }
 
     /**
-     * createS3Bucket
+     * Create an S3 Bucket
      *
      * @param string $bucketName
      */
@@ -94,7 +96,7 @@ class S3
     }
 
     /**
-     * loadS3Buckets
+     * Load all of the S3 Buckets in to a local array
      */
     private function loadS3Buckets(): void
     {

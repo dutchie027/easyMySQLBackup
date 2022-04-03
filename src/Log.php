@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace dutchie027\EasyMySQLBackup;
 
-use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 final class Log
@@ -36,14 +36,12 @@ final class Log
      */
     protected static function configureInstance(): void
     {
-        $dir = Config::getLogDir();
-
-        if (!file_exists($dir)) {
-            mkdir($dir, 0700, true);
+        if (!file_exists(Config::getLogDir())) {
+            mkdir(Config::getLogDir(), 0700, true);
         }
 
-        $logger = new Logger('easyMySQLBackup');
-        $logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . Config::getLogPrefix() . '.log', Config::getLogLevel()));
+        $logger = new Logger(Config::getLogPrefix());
+        $logger->pushHandler(new StreamHandler(Config::getLogDir() . DIRECTORY_SEPARATOR . Config::getLogPrefix() . date('-Y-m-d') . '.log', Config::getLogLevel())); /** @phpstan-ignore-line */
         self::$instance = $logger;
         self::$is_set = true;
     }

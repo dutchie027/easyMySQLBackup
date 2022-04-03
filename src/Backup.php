@@ -32,12 +32,25 @@ class Backup
     private $config;
 
     /**
-     * Constructor
+     * Default Constructor
+     * 
+     * @param string $configLoc Location of an .ini style config file
+     * 
+     * @throws \Exception When mysqldump executable not found 
+     * 
      */
     public function __construct(string $configLoc = null)
     {
         $this->config = null === $configLoc ? new Config() : new Config($configLoc);
         $this->local_store = $this->config->getLogDir();
+
+        try {
+            $this->checkForFiles();
+        } catch (\Exception $e) {
+            Log::error( $e->getMessage());
+            print $e->getMessage() . PHP_EOL;
+            exit;
+        }
 
         if (!file_exists($this->local_store)) {
             mkdir($this->local_store, 0700, true);
@@ -49,12 +62,17 @@ class Backup
     /**
      * createLocalBackup
      *
-     * @param string $database
-     * @param bool   $compress
+     * Creates a local backup of the database passed in the function call
+     * 
+     * @param string $database The name of the databse to be backed up
+     * @param bool   $compress Boolean signifiying if you want to compress the backup or not using gzip. If the parameter is omitted, it assumes true (and will compress at a level of 9)
+     * @param int    $level    When $compress is true, this pararmeter can also be included. It will denote the compression level. When excluded, it defaults to 9
      *
-     * @throws \Exception
+     * @throws \Exception When mysqldump executable not found 
+     * 
+     * @return string Returns the full name of the file that was created in the backup
      */
-    public function createLocalBackup($database, $compress = true): string
+    public function createLocalBackup($database, $compress = true, $level = 9): string
     {
         $output = '';
         $exitCode = 0;
@@ -62,20 +80,25 @@ class Backup
         $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
 
         if ($compress) {
-            $gzip = ' | gzip -9';
+            $compressLevel = (is_numeric($level) && $level > 0 && $level < 10) ? $level : 9;
+            $gzip = " | gzip -{$compressLevel}";
             $this->local_file = $this->local_file . '.gz';
         } else {
             $gzip = '';
         }
 
-        $command = "mysqldump -u {$this->user} {$this->pass} {$database} {$gzip} > {$this->local_file}";
+        $backupCommand = "mysqldump -u {$this->user} {$this->pass} {$database} {$gzip} > {$this->local_file}";
 
-        exec($command, $output, $exitCode);
+        try {
+            $this->performBackup($backupCommand);
+        } catch (\Exception $e) {
+            Log::error( $e->getMessage());
+            print $e->getMessage() . PHP_EOL;
+            exit;
+        } 
 
-        if ($exitCode > 0) {
-            throw new \Exception('mysqldump exited with a non-zero status.something must have been wrong');
-        }
-        Log::info('something really interesting happened');
+        $message = $database . ' was backed up successfully as ' . $this->local_file;
+        Log::info($message);
 
         return $this->local_file;
     }
@@ -95,5 +118,40 @@ class Backup
     public function s3(): S3
     {
         return new S3($this->config);
+    }
+
+    /**
+     * Checks to ensure the existence of the mysqldump command
+     *
+     * @return void
+     */
+    private function checkForFiles(): void
+    {
+        $required = ['gzip', 'mysqldump'];
+        if (PHP_OS != "WINNT") {
+            foreach ($required as $program) {
+                Log::debug("Chccking existence of " . $program);
+                if (!`command -v $program`) {
+                    throw new \Exception('You don\'t seem to have '.$program.' on the system'); 
+                }
+            }            
+        }
+        return;
+    }
+
+    /**
+     * Function to handle the execution of mysqldump
+     *
+     * @param string $command
+     * 
+     * @return void
+     */
+    private function performBackup($command): void
+    {
+        exec($command, $output, $exitCode);
+        if ($exitCode > 0) {
+            throw new \Exception('mysqldump exited with a non-zero status.something must have been wrong');
+        }
+        return;
     }
 }

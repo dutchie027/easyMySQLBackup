@@ -59,14 +59,16 @@ S3_REGION     = 'us-east-1'
 S3_ENDPOINT   = "https://s3.us-east-1.amazonaws.com"
 S3_ACCESS_KEY = "ABCD1234EFGH5678ZZZZ"
 S3_SECRET_KEY = "JuStiN8675309NeEDedA30918KeYtoTest567890"
+S3_ACL        = "private"
 
 [database]
-DB_USER = 'root'
-DB_PASSWORD = ''
+DB_USER       = 'root'
+DB_PASSWORD   = ''
 
 [log]
-LOG_LEVEL = 105
-LOG_PREFIX = easyMySQLBackup
+LOG_LEVEL     = 300 ;Matches Constants found https://github.com/Seldaek/monolog/blob/main/src/Monolog/Logger.php
+LOG_PREFIX    = 'easyMySQLBackup'
+LOG_DIRECTORY = '/var/log/'
 ```
 
 ## To-Do
