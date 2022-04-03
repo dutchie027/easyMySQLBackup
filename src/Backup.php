@@ -9,27 +9,32 @@ class Backup
     /**
      * @var string
      */
-    protected $user;
+    private $user;
 
     /**
      * @var string|null
      */
-    protected $pass;
+    private $pass;
 
     /**
      * @var string
      */
-    protected $local_store;
+    private $local_store;
 
     /**
      * @var string
      */
-    protected $local_file = '';
+    private $local_file = '';
 
     /**
      * @var Config
      */
     private $config;
+
+    /**
+     * @var Functions
+     */
+    private $func;
 
     /**
      * Default Constructor
@@ -43,8 +48,10 @@ class Backup
         $this->config = null === $configLoc ? new Config() : new Config($configLoc);
         $this->local_store = $this->config->getLogDir();
 
+        $this->func = new Functions();
+
         try {
-            $this->checkForFiles();
+            $this->func->checkForFiles(['gzip', 'mysqldump']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             print $e->getMessage() . PHP_EOL;
@@ -77,7 +84,8 @@ class Backup
         $output = '';
         $exitCode = 0;
 
-        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
+        // $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
+        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.sql';
 
         if ($compress) {
             $compressLevel = ($level > 0 && $level < 10) ? $level : 9;
@@ -90,7 +98,7 @@ class Backup
         $backupCommand = "mysqldump -u {$this->user} {$this->pass} {$database} {$gzip} > {$this->local_file}";
 
         try {
-            $this->performBackup($backupCommand);
+            $this->func->performCommand($backupCommand);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             print $e->getMessage() . PHP_EOL;
@@ -122,35 +130,11 @@ class Backup
     }
 
     /**
-     * Checks to ensure the existence of the mysqldump command
+     * Restore
+     * Pointer to the \Restore class
      */
-    private function checkForFiles(): void
+    public function restore(): Restore
     {
-        $required = ['gzip', 'mysqldump'];
-
-        if (PHP_OS != 'WINNT') {
-            foreach ($required as $program) {
-                Log::debug('Checking existence of ' . $program);
-                exec("command -v $program", $output, $exitCode);
-
-                if ($exitCode > 0) {
-                    throw new \Exception('You don\'t seem to have ' . $program . ' on the system');
-                }
-            }
-        }
-    }
-
-    /**
-     * Function to handle the execution of mysqldump
-     *
-     * @param string $command
-     */
-    private function performBackup($command): void
-    {
-        exec($command, $output, $exitCode);
-
-        if ($exitCode > 0) {
-            throw new \Exception('mysqldump exited with a non-zero status.something must have been wrong');
-        }
+        return new Restore($this->config);
     }
 }
