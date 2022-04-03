@@ -33,11 +33,10 @@ class Backup
 
     /**
      * Default Constructor
-     * 
+     *
      * @param string $configLoc Location of an .ini style config file
-     * 
-     * @throws \Exception When mysqldump executable not found 
-     * 
+     *
+     * @throws \Exception When mysqldump executable not found
      */
     public function __construct(string $configLoc = null)
     {
@@ -47,8 +46,9 @@ class Backup
         try {
             $this->checkForFiles();
         } catch (\Exception $e) {
-            Log::error( $e->getMessage());
+            Log::error($e->getMessage());
             print $e->getMessage() . PHP_EOL;
+
             exit;
         }
 
@@ -63,13 +63,13 @@ class Backup
      * createLocalBackup
      *
      * Creates a local backup of the database passed in the function call
-     * 
+     *
      * @param string $database The name of the databse to be backed up
      * @param bool   $compress Boolean signifiying if you want to compress the backup or not using gzip. If the parameter is omitted, it assumes true (and will compress at a level of 9)
      * @param int    $level    When $compress is true, this pararmeter can also be included. It will denote the compression level. When excluded, it defaults to 9
      *
-     * @throws \Exception When mysqldump executable not found 
-     * 
+     * @throws \Exception When mysqldump executable not found
+     *
      * @return string Returns the full name of the file that was created in the backup
      */
     public function createLocalBackup($database, $compress = true, $level = 9): string
@@ -92,10 +92,11 @@ class Backup
         try {
             $this->performBackup($backupCommand);
         } catch (\Exception $e) {
-            Log::error( $e->getMessage());
+            Log::error($e->getMessage());
             print $e->getMessage() . PHP_EOL;
+
             exit;
-        } 
+        }
 
         $message = $database . ' was backed up successfully as ' . $this->local_file;
         Log::info($message);
@@ -122,20 +123,21 @@ class Backup
 
     /**
      * Checks to ensure the existence of the mysqldump command
-     *
-     * @return void
      */
     private function checkForFiles(): void
     {
         $required = ['gzip', 'mysqldump'];
-        if (PHP_OS != "WINNT") {
+
+        if (PHP_OS != 'WINNT') {
             foreach ($required as $program) {
-                Log::debug("Chccking existence of " . $program);
+                Log::debug('Chccking existence of ' . $program);
+
                 if (!`command -v $program`) {
-                    throw new \Exception('You don\'t seem to have '.$program.' on the system'); 
+                    throw new \Exception('You don\'t seem to have ' . $program . ' on the system');
                 }
-            }            
+            }
         }
+
         return;
     }
 
@@ -143,15 +145,15 @@ class Backup
      * Function to handle the execution of mysqldump
      *
      * @param string $command
-     * 
-     * @return void
      */
     private function performBackup($command): void
     {
         exec($command, $output, $exitCode);
+
         if ($exitCode > 0) {
             throw new \Exception('mysqldump exited with a non-zero status.something must have been wrong');
         }
+
         return;
     }
 }

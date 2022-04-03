@@ -29,8 +29,6 @@ class S3
 
     /**
      * Default Constructor
-     * 
-     * @param Config $config
      */
     public function __construct(Config $config)
     {
