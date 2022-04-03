@@ -138,8 +138,6 @@ class Backup
                 }
             }
         }
-
-        return;
     }
 
     /**
@@ -154,7 +152,5 @@ class Backup
         if ($exitCode > 0) {
             throw new \Exception('mysqldump exited with a non-zero status.something must have been wrong');
         }
-
-        return;
     }
 }
