@@ -26,6 +26,8 @@ You will also need to ensure you have a copy of `mysqldump` on the box this is h
 
 The program will assume a lot of defaults if you don't have a config file, however it is highly suggested you create a config (see sample .ini below)
 
+### Backup Locally
+
 ``` php
 #!/usr/bin/php
 <?php
@@ -35,9 +37,26 @@ include_once 'vendor/autoload.php';
 use dutchie027\EasyMySQLBackup\Backup;
 
 # OPTION A: Create a new backup with "default" configuration set
-$backup = new Backup($config);
+$backup = new Backup();
 
-# OPTION B: Create a configuration set using a .ini file
+# OPTION B: Create a configuration set using an .ini file
+$backup = new Backup('/path/to/my.ini');
+
+# Backup the database named "test". The location on the file system will be returned
+$backup_file = $backup->createLocalBackup("test");
+```
+
+### Backup and Upload to S3
+
+``` php
+#!/usr/bin/php
+<?php
+
+include_once 'vendor/autoload.php';
+
+use dutchie027\EasyMySQLBackup\Backup;
+
+# Because we're using S3, we have to instatiate it with a configuration set using an .ini file
 $backup = new Backup('/path/to/my.ini');
 
 # Backup the database named "test". The location on the file system will be returned
@@ -49,6 +68,46 @@ $backup->s3->uploadFile($backup_file, "my-sql-backups");
 
 # Using the initial connection, remove the local file
 $backup->purgeBackup();
+```
+
+### Restore A Local File
+
+``` php
+#!/usr/bin/php
+<?php
+
+include_once 'vendor/autoload.php';
+
+use dutchie027\EasyMySQLBackup\Backup;
+
+# OPTION A: Create a new backup with "default" configuration set
+$backup = new Backup();
+
+# Restore the file '/backups/mydb.20220330162457.sql.gz' to the database named 'restoredb'
+# Also, force the database to be dropped & recreated
+$backup->restore()->restoreLocalBackup('/backups/mydb.20220330162457.sql.gz', 'restoredb', 1);
+```
+
+### Restore From S3
+
+``` php
+#!/usr/bin/php
+<?php
+
+include_once 'vendor/autoload.php';
+
+use dutchie027\EasyMySQLBackup\Backup;
+
+# Because we're using S3, we have to give it a config file with our KVPs for S3 Access in them
+$backup = new Backup('/path/to/my.ini');
+
+# First download the file coredb.20220330162457.sql.gz from the bob-test bucket and put it in /tmp
+# Assuming all runs well, store the local file name in the variable $buf
+$buf = $backup->s3()->downloadFile('bob-test/coredb.20220330162457.sql.gz', '/tmp');
+
+# Restore the newly downloaded $buf file to a new database 'core-restore' and force it to be dropped
+# and created fresh
+$backup->restore()->restoreLocalBackup($buf, 'core-restore', 1);
 ```
 
 ## Sample my.ini
