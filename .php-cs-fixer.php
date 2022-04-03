@@ -13,7 +13,7 @@ $finder = PhpCsFixer\Finder::create()
 
 $config = new PhpCsFixer\Config('dutchie027');
 
-mkdir('.build/php-cs-fixer', 0755, true);
+@mkdir('.build/php-cs-fixer', 0755, true);
 
 return $config
     ->setCacheFile('.build/php-cs-fixer/cache')
