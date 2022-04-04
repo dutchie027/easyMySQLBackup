@@ -49,13 +49,40 @@ class S3
     /**
      * Upload File
      *
-     * @param string $file
-     * @param string $bucket
-     * @param string $name
+     * @param string $localFile
+     * @param string $s3File
      */
-    public function uploadFile($file, $bucket, $name = ''): void
+    public function uploadFile($localFile, $s3File): void
     {
-        $key = (strlen($name) < 1) ? basename($file) : $name;
+        $fileParts = explode('/', $s3File);
+        $bucket = $fileParts[0];
+        $fileBase = pathinfo($localFile, PATHINFO_BASENAME);
+
+        // try {
+        //     $pattern = '/(\.gz|\.sql|\/)$/';
+        //     if (!preg_match($pattern, $s3File)) {
+        //         throw new \Exception($s3File . ' must end in .sql, .gz or a /');
+        //     }
+        // } catch (\Exception $e) {
+        //     Log::error($e->getMessage());
+        //     print $e->getMessage() . PHP_EOL;
+
+        //     exit;
+        // }
+
+        $s3Key = '';
+
+        for ($x = 1;$x < count($fileParts) ; ++$x) {
+            $s3Key .= $fileParts[$x] . DIRECTORY_SEPARATOR;
+        }
+
+        $s3Key = substr($s3Key, 0, -1);
+
+        $pattern = '/(\.gz|\.sql)$/';
+
+        if (!preg_match($pattern, $s3File)) {
+            $s3Key = preg_match('/\/$/', $s3Key) ? $s3Key . $fileBase : $s3Key . DIRECTORY_SEPARATOR . $fileBase;
+        }
 
         if (!in_array($bucket, $this->bucketArray, true)) {
             $this->createS3Bucket($bucket);
@@ -63,15 +90,21 @@ class S3
             Log::info($bucket . " didn't exist. I'm creating it");
         }
 
+        print $s3Key . PHP_EOL;
+
         try {
             $result = $this->s3->putObject([
                 'Bucket' => $bucket,
-                'Key' => $key,
-                'SourceFile' => $file,
+                'Key' => $s3Key,
+                'SourceFile' => $localFile,
                 'ACL' => $this->s3_acl,
             ]);
         } catch (S3Exception $e) {
-            Log::error($e->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            $error = 'Trying to upload ' . $localFile . ' to ' . $s3File . ' returned ' . $e->getStatusCode() . ' ' . $e->getAWSErrorCode();
+            Log::error($error);
+            print $error . PHP_EOL;
+
+            exit;
         }
     }
 
@@ -91,7 +124,7 @@ class S3
         $s3Key = '';
 
         for ($x = 1;$x < count($fileParts) ; ++$x) {
-            $s3Key = $fileParts[$x] . DIRECTORY_SEPARATOR;
+            $s3Key .= $fileParts[$x] . DIRECTORY_SEPARATOR;
         }
 
         $s3Key = substr($s3Key, 0, -1);

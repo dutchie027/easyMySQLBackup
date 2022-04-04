@@ -62,9 +62,12 @@ $backup = new Backup('/path/to/my.ini');
 # Backup the database named "test". The location on the file system will be returned
 $backup_file = $backup->createLocalBackup("test");
 
-# Upload the $backup_name file to the bucket "my-sql-backups"
-# NOTE: If the bucket "my-sql-backups" doesn't exist, it will create it
-$backup->s3->uploadFile($backup_file, "my-sql-backups");
+# Upload the $backup_name file to the S3 Location "my-sql-backups/database.12345.sql.gz"
+# NOTE: It will chop and assume the bucket name of "my-sql-backups". If the bucket "my-sql-backups" doesn't exist, it will create it
+# NOTE 2: You can use multiple depts to the S3 key name
+# NOTE 3: If you end the second parameter in anything other than .sql or .gz it will assume
+# you are using a directory and append the name of the backup file to the end of the structure
+$backup->s3->uploadFile($backup_file, "my-sql-backups/database.12345.sql.gz");
 
 # Using the initial connection, remove the local file
 $backup->purgeBackup();
