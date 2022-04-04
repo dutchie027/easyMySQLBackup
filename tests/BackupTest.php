@@ -19,6 +19,12 @@ final class BackupTest extends TestCase
         $this->backup = new Backup();
     }
 
+    public function testCreateBackup(): void
+    {
+        $buf = $this->backup->createLocalBackup('phpunit');
+        self::assertStringContainsString('phpunit', $buf);
+    }
+
     public function testPurgeBackup(): void
     {
         $this->backup->purgeBackup();
