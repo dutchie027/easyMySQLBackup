@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Setup and Config MySQL
-        - run: |
+        run: |
           sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE phptest;' -uroot -proot
           mysql -e 'SHOW DATABASES;' -uroot -proot
