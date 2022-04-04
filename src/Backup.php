@@ -81,11 +81,7 @@ class Backup
      */
     public function createLocalBackup($database, $compress = true, $level = 9): string
     {
-        $output = '';
-        $exitCode = 0;
-
-        // $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
-        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.sql';
+        $this->local_file = $this->local_store . DIRECTORY_SEPARATOR . $database . '.' . date('YmdHis') . '.sql';
 
         if ($compress) {
             $compressLevel = ($level > 0 && $level < 10) ? $level : 9;
