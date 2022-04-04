@@ -36,7 +36,7 @@ final class RestoreTest extends TestCase
         $this->backup = new Backup($this->tmp_ini);
     }
 
-    public function testRestore(): void
+    public function testrestoreLocalBackup(): void
     {
         $buf = $this->backup->createLocalBackup('phpunit');
         $this->backup->restore()->restoreLocalBackup($buf, 'phprest', true);
