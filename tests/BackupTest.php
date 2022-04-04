@@ -19,6 +19,17 @@ final class BackupTest extends TestCase
      */
     private $tmp_ini;
 
+    /**
+     * @var string
+     */
+    private static $filename;
+
+    public static function setUpBeforeClass(): void
+    {
+        new Config();
+        self::$filename = Config::getLogDir() . DIRECTORY_SEPARATOR . Config::getLogPrefix() . date('-Y-m-d') . '.log';
+    }
+
     protected function setUp(): void
     {
         $this->tmp_ini = tempnam(sys_get_temp_dir(), 'phpunit') ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php-unit';
@@ -45,12 +56,17 @@ final class BackupTest extends TestCase
     public function testcreateLocalBackupFailure(): void
     {
         $buf = $this->backup->createLocalBackup('empty-db');
-        self::assertStringContainsString('foo', 'bar');
+        self::assertNotFalse(strpos($this->returnContents(), 'exited with a non-zero status'));
     }
 
     public function testPurgeBackup(): void
     {
         $this->backup->purgeBackup();
         self::assertFileDoesNotExist(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php-unit');
+    }
+
+    private function returnContents(): string
+    {
+        return file_get_contents(self::$filename) ?: '';
     }
 }
