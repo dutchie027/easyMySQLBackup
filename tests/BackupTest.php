@@ -57,7 +57,7 @@ final class BackupTest extends TestCase
     public function testcreateLocalBackupFailure(): void
     {
         $buf = $this->backup->createLocalBackup('empty-db');
-        self::assertNotFalse(strpos($this->returnContents(), 'exited with a non-zero status'));
+        self::assertFalse(strpos($this->returnContents(), 'exited with a non-zero status'));
     }
 
     public function testPurgeBackup(): void
