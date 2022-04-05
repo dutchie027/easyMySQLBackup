@@ -49,5 +49,21 @@
         "phpstan/phpstan": "^1.5",
         "phpunit/phpunit": "^9",
         "psalm/phar": "^4.22"
+    },
+    "scripts": {
+        "fix": "./vendor/bin/php-cs-fixer fix",
+        "test": "./vendor/bin/phpunit",
+        "stan": "./vendor/bin/phpstan --no-progress",
+        "runall": [
+            "@fix",
+            "@test",
+            "@stan"
+        ]
+    },
+    "scripts-descriptions": {
+        "test": "Runs phpunit tests",
+        "fix": "Runs PHP-CS Fixer",
+        "stan": "Runs phpstan to check standards",
+        "runall": "Runs all tests (fixer, phpunit, phpstan)"
     }
 }
